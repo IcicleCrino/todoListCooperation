@@ -2,17 +2,13 @@ import express from "express"
 import mysql2 from "mysql2/promise"
 import fs from "node:fs"
 import jsyaml from "js-yaml"
-import jwt from "jsonwebtoken"
 import { expressjwt } from "express-jwt"
-import moment from "moment"
-import crypto from "node:crypto"
 
-import secretKey from './secretKey.js';
-import { priKey } from "../store/crypt.js"
+import secretKey from '../secretKey.js';
 
 //使用express的.Router()方法，调用后返回router实例，然后在router实例上进行操作，编写接口
 const router = express.Router()
-s
+
 //中间件允许跨域
 router.use("*", (req, res, next) => {
     //
@@ -53,90 +49,13 @@ router.use(expressjwt({
     ]
 }))
 
-//用户注册 输入账号和密码和用户名称 返回jwt类型的token
-router.post("/reg", async (req, res) => {
-    //使用mysql2的createConnection()方法返回的实例，的.query()方法执行sql语句。先在数据库中查询，账号是否重复。如果重复的话，返回code400
-    let [result] = await sql.query(`SELECT account FROM user WHERE account = ?`, [req.body.account])
-    //账号没有被注册过，允许注册
-    if (result.length <= 0) {
-        //前端确保提交的账号和密码都不为空，并且符合要求
-        await sql.query(`INSERT INTO user(account, password, user_name) VALUES(?, ?, ?)`, [req.body.account, req.body.password, req.body.user_name])
-        res.send({
-            code: 200,
-            message: "账号成功注册"
-        })
-        return
-    }
-    //说明查询账号有结果，不允许二次注册
-    res.send({
-        code: 400,
-        message: "账号已存在"
-    })
-})
-
-//用户登录，输入账号和密码，然后在user表中查询。正确的话返回jwt生成的token，jwt的payload中包含用户id。
-router.post("/login", async (req, res) => {
-    //从请求体中，将账号和密码解构出来
-    let { account, password } = req.body
-    console.log(req.body);
-
-    //将Base64编码的加密数据解码成二进制
-    let passwordBuffer = Buffer.from(password, "base64")
-
-    //将二进制的加密数据通过node的crypto模块解密
-    password = crypto.privateDecrypt(
-        {
-            key: priKey,
-            padding: crypto.constants.RSA_PKCS1_PADDING
-        },
-        passwordBuffer
-    );
-    console.log(password.toString("UTF-8"));
-    //通过账号在user表中查询，判断密码是否正确
-    //第一层数组解构，获取query返回数组中第一个元素（查询到的表数据的数组）
-    //地而成对象解构，获取表数据数组中的第一个元素，即第一行数据
-    let [[result]] = await sql.query(`SELECT user_id, password FROM user WHERE account = ?`, [account])
-    //判断账号是否存在
-    if (result === undefined) {
-        //账号不存在
-        res.send({
-            code: 400,
-            message: "账号不存在"
-        })
-        return
-    }
-    //如果用户输入的密码等于实际密码
-    if (password == result.password) {
-        //通过jwt生成token，payload部分包含用户id
-        //使用jsonwebtoken模块的.sign()方法生成token，通过传入三个参数进行配置
-        //第一参数为payload部分，第二参数为加密用的密钥，第三参数可以规定token过期时间
-        const Token = jwt.sign({
-            user_id: result.user_id
-        }, secretKey, {
-            expiresIn: "7d"
-        })
-        res.send({
-            code: 200,
-            message: "登录成功",
-            token: Token,
-            user_id: result.user_id
-        })
-        return
-    }
-    //用户密码输入错误
-    res.send({
-        code: 400,
-        message: "密码错误，请重试"
-    })
-})
-
 //用户创建待办事项，需要token
 router.post("/createTodo", async (req, res) => {
     //从请求体中解构出信息
     let { event_name, start_time, end_time, target_id } = req.body
     //将Date类型转化为数据库格式，即删除毫秒和时区，houw
     console.log(start_time, end_time)
-    
+
     //从token中获取用户id
     let user_id = req.auth.user_id
     //将待办事项信息插入数据库
