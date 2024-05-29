@@ -35,12 +35,12 @@
                             <div
                                 class="text-base font-thin before:relative before:top-0.5 before:text-center before:text-red-500 before:content-['*']"
                             >
-                                账号:
+                                邮箱:
                             </div>
                             <el-input
                                 v-model="tempDateStore.tempLoginAccount"
                                 class="h-12 w-full"
-                                placeholder="请输入账号"
+                                placeholder="请输入邮箱"
                             ></el-input>
                         </div>
                         <div>
@@ -75,12 +75,12 @@
                             <div
                                 class="text-base font-thin before:relative before:top-0.5 before:text-center before:text-red-500 before:content-['*']"
                             >
-                                账号:
+                                邮箱:
                             </div>
                             <el-input
                                 v-model="tempDateStore.tempRegAccount"
                                 class="h-12 w-full"
-                                placeholder="请输入账号"
+                                placeholder="请输入邮箱"
                             ></el-input>
                         </div>
                         <div>
@@ -122,9 +122,8 @@ import { pubKey } from "@/stores/keys";
 import axiosAPI from "@/components/api/axiosAPI";
 import Notice from "@/components/api/toastAPI";
 
-const tempDateStore = useTempDataStore()
+const tempDateStore = useTempDataStore();
 const router = useRouter();
-const URL = useURLStore();
 
 const notify = () => {
     Notice.successNotice("欢迎来到待办事项");
@@ -152,15 +151,16 @@ const toReg = () => {
 //登录
 const loginSubmit = () => {
     //创建实例对象
-    const encryptor = new JSEncrypt();
-    encryptor.setPublicKey(pubKey);
-    const rsaPassword = encryptor.encrypt(tempDateStore.tempLoginPassword);
-    console.log(rsaPassword);
+    // const encryptor = new JSEncrypt();
+    // encryptor.setPublicKey(pubKey);
+    // const rsaPassword = encryptor.encrypt(tempDateStore.tempLoginPassword);
+    // console.log(rsaPassword);
 
     let result = axiosAPI.userLogin(
         tempDateStore.tempLoginAccount,
-        rsaPassword as string,
+        tempDateStore.tempLoginPassword as string,
     );
+
     result.then(({ status, userId }) => {
         if (status == 200) {
             useUserStore().userId = userId;

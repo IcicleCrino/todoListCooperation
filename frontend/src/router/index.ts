@@ -23,11 +23,6 @@ const router = createRouter({
                     component: () => import("@/components/list.vue"),
                 },
                 {
-                    path: "quation",
-                    name: "quation",
-                    component: () => import("@/components/quation.vue"),
-                },
-                {
                     path: "note",
                     name: "note",
                     component: ()=> import("@/components/note.vue")

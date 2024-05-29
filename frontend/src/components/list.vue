@@ -102,7 +102,6 @@ import { reactive } from "vue";
 import axios from "axios";
 import { useURLStore } from "../stores/URL";
 import { useTodoStore } from "../stores/todo";
-import { useQuationStore } from "@/stores/quation";
 import { useUserStore } from "@/stores/user";
 import moment from "moment";
 
@@ -117,7 +116,6 @@ import toastAPI from "@/components/api/toastAPI";
 
 const Todo = useTodoStore();
 const URL = useURLStore();
-const Quation = useQuationStore();
 const User = useUserStore();
 
 const displayTodoListFlag = ref(true);
@@ -164,7 +162,6 @@ const submitTodo = () => {
     });
 
     //然后把新增项添加到Quation里
-    Quation.topleftList.push(JSON.parse(JSON.stringify(tempTodo)));
 };
 
 //通过check-box完成待办 抽象函数，将target指定的值删除，添加到nextTaregt中，然后根据当前值判断使用哪一个接口

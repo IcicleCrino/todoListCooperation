@@ -14,9 +14,9 @@ async function userReg(
     let status = -1;
     await axios
         .post(URL.userReg, {
-            user_name: userName,
-            account: userAccount,
-            password: userPassword,
+            userName: userName,
+            userAccount: userAccount,
+            userPassword: userPassword,
         })
         .then((res) => {
             if (res.data.code == 200) {
@@ -39,31 +39,23 @@ async function userLogin(userAccount: string, userPassword: string) {
     let userId = -1;
     await axios
         .post(URL.userLogin, {
-            account: userAccount,
-            password: userPassword,
+            userAccount: userAccount,
+            userPassword: userPassword,
         })
         .then((res) => {
             //通过res.data.code判断是否登录成功
             if (res.data.code == 200) {
-                //登录成功
-                localStorage.setItem("token", res.data.token);
                 //返回用户id
-                localStorage.setItem("user_id", res.data.user_id);
-                userId = res.data.user_id;
+                localStorage.setItem("userId", res.data.userId);
+                userId = res.data.userId;
                 status = 200;
             } else {
                 status = 400;
             }
-            //将返回的token存入localStorage
         })
         .catch((error) => {
             status = 500;
         });
-
-    //登陆后，默认携带token
-    //自动为axios默认添加授权头
-    axios.defaults.headers.common["Authorization"] =
-        `Bearer ${localStorage.getItem("token")}`;
 
     return {
         status,

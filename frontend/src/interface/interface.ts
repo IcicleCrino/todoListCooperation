@@ -33,3 +33,16 @@ export interface TempTodo {
     orga_id?: number;
     orga_name?: string;
 }
+
+export interface Note {
+    noteId?: number;
+    title: string;
+    content: string;
+    createTime?: Date;
+    updatedTIme?: Date;
+}
+
+export interface NoteSearchResult {
+    title: string;
+    noteId: number;
+}
