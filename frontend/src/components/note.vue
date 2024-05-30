@@ -52,7 +52,7 @@
                 >
                     <input
                         v-model="displayTitle"
-                        class="ml-8 text-3xl font-bold"
+                        class="ml-8 w-full flex-grow text-3xl font-bold"
                     />
                 </div>
             </div>
@@ -164,8 +164,9 @@ const saveNote = (index: number) => {
     //如果重名，则依次尝试添加后缀（1）~(120)，直到不重名为止
     let tempTitle = NoteStore.noteList[index].title;
     for (let i = 1; i < 120; i++) {
-        if (isTitleDuplicated(tempTitle)) {
-            tempTitle = NoteStore.noteList[index].title + "（" + i.toString() + "）";
+        if (isTitleDuplicated(tempTitle, index)) {
+            tempTitle =
+                NoteStore.noteList[index].title + "（" + i.toString() + "）";
         } else {
             break;
         }
@@ -184,8 +185,12 @@ const saveNote = (index: number) => {
         });
 };
 
-const isTitleDuplicated = (title: string) => {
+const isTitleDuplicated = (title: string, index: number = -1) => {
     for (let i = 0; i < NoteStore.noteList.length; i++) {
+        //如果传入下标index，则说明检查是否重复时，跳过该下标
+        if (i === index) {
+            continue;
+        }
         if (NoteStore.noteList[i].title === title) {
             return true;
         }
