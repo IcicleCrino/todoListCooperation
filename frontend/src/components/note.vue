@@ -161,8 +161,16 @@ const toNote = (index: number) => {
 
 //保存当前笔记
 const saveNote = (index: number) => {
-    //首先判断标题和内容是否发生改变
-    
+    //如果重名，则依次尝试添加后缀（1）~(120)，直到不重名为止
+    let tempTitle = NoteStore.noteList[index].title;
+    for (let i = 1; i < 120; i++) {
+        if (isTitleDuplicated(tempTitle)) {
+            tempTitle = NoteStore.noteList[index].title + "（" + i.toString() + "）";
+        } else {
+            break;
+        }
+    }
+    NoteStore.noteList[index].title = tempTitle;
 
     //调用patch方法，更新旧笔记
     axios

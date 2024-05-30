@@ -47,7 +47,10 @@
                 <div
                     class="h-28 w-28 cursor-pointer rounded-full bg-white p-1 text-gray-200 ring-8 duration-100 hover:scale-105"
                 >
-                    <el-icon className="" style="overflow: hidden"
+                    <el-icon
+                        className=""
+                        style="overflow: hidden"
+                        @click="$router.push('/login')"
                         ><User color="rgb(96,165,250)"
                     /></el-icon>
                 </div>

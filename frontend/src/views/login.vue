@@ -165,6 +165,7 @@ const loginSubmit = () => {
         if (status == 200) {
             useUserStore().userId = userId;
             Notice.successNotice("登录成功");
+            localStorage.setItem("token", "1");
             router.push("/user/list");
         } else if (status == 400) {
             Notice.errorNotice("账号或密码错误");
@@ -181,13 +182,22 @@ const regSubmit = () => {
     //注册校验
     if (
         tempDateStore.tempRegAccount.length < 8 ||
-        tempDateStore.tempRegAccount.length > 24 ||
-        tempDateStore.tempRegAccount.length < 8 ||
+        tempDateStore.tempRegAccount.length > 24
+    ) {
+        //提示账号不符合要求
+        Notice.warnNotice("邮箱格式错误!");
+        Notice.warnNotice("邮箱应为8~24位");
+        return;
+    }
+
+    //注册校验
+    if (
+        tempDateStore.tempRegPassword.length < 8 ||
         tempDateStore.tempRegPassword.length > 24
     ) {
         //提示账号不符合要求
-        Notice.warnNotice("账号格式错误!");
-        Notice.warnNotice("账号应为8~24位\n密码应为8~24位");
+        Notice.warnNotice("密码格式错误!");
+        Notice.warnNotice("密码应为8~24位");
         return;
     }
 
