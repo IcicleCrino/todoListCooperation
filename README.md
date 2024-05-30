@@ -1,3 +1,3 @@
 # todoListCooperation
-个人项目，面向组织任务管理 
+待办事项管理系统
 
