@@ -18,14 +18,14 @@ const router = createRouter({
             component: () => import("@/views/user/user.vue"),
             children: [
                 {
-                    path: "list",
-                    name: "list",
-                    component: () => import("@/components/list.vue"),
+                    path: "todo",
+                    name: "todo",
+                    component: () => import("@/components/components/todo/todo.vue"),
                 },
                 {
                     path: "note",
                     name: "note",
-                    component: ()=> import("@/components/note.vue")
+                    component: () => import("@/components/note.vue")
                 },
                 {
                     path: "tomato",

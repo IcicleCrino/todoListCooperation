@@ -166,7 +166,7 @@ const loginSubmit = () => {
             useUserStore().userId = userId;
             Notice.successNotice("登录成功");
             localStorage.setItem("token", "1");
-            router.push("/user/list");
+            router.push("/user/todo");
         } else if (status == 400) {
             Notice.errorNotice("账号或密码错误");
         } else {
